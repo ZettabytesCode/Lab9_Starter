@@ -6,6 +6,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab 9</title>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "968ac6b86e0e479a8757639de60d87a6"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
 
   <style>
     button {
@@ -88,14 +96,31 @@
   </main>
 
   <script>
+
+    class InputError extends Error {
+      constructor(message) {
+        super(message); // (1)
+        this.name = "InputError"; // (2)
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
       let output = document.querySelector('output');
-      let firstNum = document.querySelector('#first-num').value;
-      let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      let outputVal;
+      try{
+        let firstNum = document.querySelector('#first-num').value;
+        let secondNum = document.querySelector('#second-num').value;
+        let operator = document.querySelector('#operator').value;
+        outputVal = eval(`${firstNum} ${operator} ${secondNum}`);
+      }catch(err){
+        console.log(err);
+        outputVal = "Error, invalid input";
+        throw new InputError();
+      }finally{
+        output.innerHTML = outputVal;
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
@@ -110,41 +135,41 @@
       console.error('error');
     });
 
-    // errorBtns[0].addEventListener('click', (event) =>{
-    //   console.log('hello');
-    // });
+    errorBtns[2].addEventListener('click', (event) =>{
+      console.count();
+    });
 
     errorBtns[3].addEventListener('click', (event) =>{
       console.warn('WARN');
     });
 
-    errorBtns[0].addEventListener('click', (event) =>{
-      console.assert('hello' === 'sad');
+    errorBtns[4].addEventListener('click', (event) =>{
+      console.assert('hello' == 'sad', "%o", "failure");
     });
 
-    // errorBtns[0].addEventListener('click', (event) =>{
-    //   console.log('hello');
-    // });
+    errorBtns[5].addEventListener('click', (event) =>{
+      console.clear();
+    });
 
-    // errorBtns[0].addEventListener('click', (event) =>{
-    //   console.log('hello');
-    // });
+    errorBtns[6].addEventListener('click', (event) =>{
+      console.dir(errorBtns[6])
+    });
 
-    // errorBtns[0].addEventListener('click', (event) =>{
-    //   console.log('hello');
-    // });
+    errorBtns[7].addEventListener('click', (event) =>{
+      console.dirxml(errorBtns[7]);
+    });
 
     errorBtns[8].addEventListener('click', (event) =>{
       console.group('Group');
     });
 
     errorBtns[9].addEventListener('click', (event) =>{
-      console.groupEnd();
+      console.groupEnd('Group');
     });
 
-    // errorBtns[0].addEventListener('click', (event) =>{
-    //   console.log('hello');
-    // });
+    errorBtns[10].addEventListener('click', (event) =>{
+      console.table(['hey', 'hi', 'hello']);
+    });
 
     errorBtns[11].addEventListener('click', (event) =>{
       console.time('Time');
@@ -154,13 +179,13 @@
       console.timeEnd('Time');
     });
 
-    // errorBtns[0].addEventListener('click', (event) =>{
-    //   console.log('hello');
-    // });
+    errorBtns[13].addEventListener('click', (event) =>{
+      console.trace();
+    });
 
-    // errorBtns[0].addEventListener('click', (event) =>{
-    //   console.log('hello');
-    // });
+    errorBtns[14].addEventListener('click', (event) =>{
+      throw new Error("ggs");
+    });
 
   </script>
 </body>
